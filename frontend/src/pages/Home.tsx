@@ -51,10 +51,12 @@ export const Home = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-white opacity-50 pointer-events-none"></div>
                 <div className="relative max-w-4xl mx-auto space-y-8">
                     <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                        Find the career you deserve with <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">JobsDB Pro</span>
+                        หางานที่ใช่กับ <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-cyan-500">
+                            JOBS
+                        </span>
                     </h1>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                        Connect with top employers, discover high-paying opportunities, and take the next step in your professional journey.
+                        ค้นพบโอกาสงานที่ใช่สำหรับคุณ
                     </p>
 
                     {/* Quick Search Bar */}
@@ -63,7 +65,7 @@ export const Home = () => {
                             <svg className="w-5 h-5 text-gray-400 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             <input
                                 type="text"
-                                placeholder="Job title, keywords, or company..."
+                                placeholder="ชื่อตำแหน่ง, คีย์เวิร์ด, หรือบริษัท..."
                                 className="w-full bg-transparent border-none focus:ring-0 text-gray-900 placeholder-gray-500 py-3"
                                 value={keyword}
                                 onChange={e => setKeyword(e.target.value)}
@@ -74,19 +76,19 @@ export const Home = () => {
                             <svg className="w-5 h-5 text-gray-400 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             <input
                                 type="text"
-                                placeholder="City or location..."
+                                placeholder="เมืองหรือสถานที่..."
                                 className="w-full bg-transparent border-none focus:ring-0 text-gray-900 placeholder-gray-500 py-3"
                                 value={location}
                                 onChange={e => setLocation(e.target.value)}
                             />
                         </div>
                         <button type="submit" className="bg-black hover:bg-black text-white font-bold py-3 px-8 rounded-xl transition-all shadow-md hover:shadow-lg mt-2 sm:mt-0">
-                            Search Jobs
+                            ค้นหางาน
                         </button>
                     </form>
 
                     <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-6">
-                        <span>Popular searches:</span>
+                        <span>ค้นหายอดนิยม:</span>
                         <div className="flex flex-wrap justify-center gap-2">
                             <span className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full cursor-pointer transition-colors" onClick={() => navigate('/jobs?title=designer')}>Designer</span>
                             <span className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full cursor-pointer transition-colors" onClick={() => navigate('/jobs?title=developer')}>Developer</span>
@@ -100,11 +102,11 @@ export const Home = () => {
             <section className="max-w-7xl mx-auto px-4 w-full">
                 <div className="flex justify-between items-end mb-8">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900">Featured Opportunities</h2>
-                        <p className="text-gray-500 mt-2">Discover the latest jobs posted by top employers.</p>
+                        <h2 className="text-3xl font-bold text-gray-900">ตำแหน่งงานแนะนำ</h2>
+                        <p className="text-gray-500 mt-2">ค้นพบโอกาสงานที่ใช่สำหรับคุณ</p>
                     </div>
                     <Link to="/jobs" className="text-primary-600 font-medium hover:text-primary-700 hidden sm:block">
-                        View all jobs &rarr;
+                        ดูตำแหน่งงานทั้งหมด &rarr;
                     </Link>
                 </div>
 
@@ -147,14 +149,14 @@ export const Home = () => {
                 )}
                 <div className="mt-8 text-center sm:hidden">
                     <Link to="/jobs" className="text-primary-600 font-medium hover:text-primary-700">
-                        View all jobs &rarr;
+                        ดูงานทั้งหมด &rarr;
                     </Link>
                 </div>
             </section>
 
             {/* TOP COMPANIES SECTION */}
             <section className="bg-gray-50 rounded-3xl py-12 px-8 max-w-7xl mx-auto w-full text-center border border-gray-100">
-                <p className="text-sm font-bold tracking-wider text-gray-400 uppercase mb-8">Trusted by growing companies everywhere</p>
+                <p className="text-sm font-bold tracking-wider text-gray-400 uppercase mb-8">ได้รับความไว้วางใจจากบริษัทที่กำลังเติบโตทั่วโลก</p>
                 <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                     {/* Static logos for demonstration */}
                     <div className="text-2xl font-black text-gray-800 tracking-tighter">Acme Corp</div>

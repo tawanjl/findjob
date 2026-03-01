@@ -59,6 +59,15 @@ let JobService = class JobService {
         }
         return qb.getMany();
     }
+    async findMyJobs(employerId) {
+        const company = await this.companyService.findOneByEmployerId(employerId);
+        if (!company)
+            return [];
+        return this.jobRepository.find({
+            where: { companyId: company.id },
+            order: { createdAt: 'DESC' },
+        });
+    }
     async findOne(id) {
         const job = await this.jobRepository.findOne({ where: { id }, relations: ['company'] });
         if (!job) {

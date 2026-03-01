@@ -88,19 +88,19 @@ export const JobBoard = () => {
     return (
         <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow border border-gray-100 mb-8">
-                <h2 className="text-2xl font-extrabold text-gray-900 mb-4">Find Your Next Job</h2>
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-4">ค้นหางานที่ใช่สำหรับคุณ</h2>
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col sm:flex-row gap-4">
                         <input
                             type="text"
-                            placeholder="Job title, keywords..."
+                            placeholder="ชื่อตำแหน่ง, คีย์เวิร์ด, หรือบริษัท..."
                             className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                             value={keyword}
                             onChange={(e) => setKeyword(e.target.value)}
                         />
                         <input
                             type="text"
-                            placeholder="Location, city, zip..."
+                            placeholder="เมืองหรือสถานที่..."
                             className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
@@ -113,7 +113,7 @@ export const JobBoard = () => {
                             value={jobType}
                             onChange={(e) => setJobType(e.target.value)}
                         >
-                            <option value="">All Job Types</option>
+                            <option value="">ประเภทงาน</option>
                             <option value="Full-time">Full-time</option>
                             <option value="Part-time">Part-time</option>
                             <option value="Contract">Contract</option>
@@ -134,7 +134,7 @@ export const JobBoard = () => {
                             onClick={fetchJobs}
                             className="px-8 py-2 bg-black text-white font-medium rounded-md hover:bg-black shadow-sm"
                         >
-                            Search
+                            ค้นหางาน
                         </button>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ export const JobBoard = () => {
                 {loading ? (
                     <p className="text-center text-gray-500 py-10">Loading jobs...</p>
                 ) : jobs.length === 0 ? (
-                    <p className="text-center text-gray-500 py-10">No jobs found matching your criteria.</p>
+                    <p className="text-center text-gray-500 py-10">ไม่พบตำแหน่งงานที่ตรงกับเกณฑ์การค้นหาของคุณ</p>
                 ) : (
                     jobs.map(job => (
                         <div key={job.id} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
@@ -167,11 +167,11 @@ export const JobBoard = () => {
                                         </Link>
                                         <p className="text-gray-900 font-medium mb-2">{job.company.name}</p>
                                         <div className="flex flex-wrap gap-2 text-sm text-gray-600 mb-4">
-                                            {job.location && <span className="bg-gray-100 px-2 py-1 rounded">📍 {job.location}</span>}
-                                            <span className="bg-gray-100 px-2 py-1 rounded">⏱️ {job.jobType}</span>
-                                            {job.experience && <span className="bg-gray-100 px-2 py-1 rounded">🎓 {job.experience} level</span>}
+                                            {job.location && <span className="bg-gray-100 px-2 py-1 rounded"> {job.location}</span>}
+                                            <span className="bg-gray-100 px-2 py-1 rounded"> {job.jobType}</span>
+                                            {job.experience && <span className="bg-gray-100 px-2 py-1 rounded"> {job.experience} ปี</span>}
                                             {job.salaryMin && job.salaryMax && (
-                                                <span className="bg-gray-100 px-2 py-1 rounded">💵 ฿{job.salaryMin.toLocaleString()} - ฿{job.salaryMax.toLocaleString()}</span>
+                                                <span className="bg-gray-100 px-2 py-1 rounded"> ฿{job.salaryMin.toLocaleString()} - ฿{job.salaryMax.toLocaleString()}</span>
                                             )}
                                         </div>
                                         <p className="text-gray-600 text-sm line-clamp-3">{job.description}</p>
@@ -194,13 +194,13 @@ export const JobBoard = () => {
                                                     onClick={() => handleApply(job.id)}
                                                     className="flex-1 bg-primary-600 outline-none text-white px-6 py-2 rounded-md font-medium hover:bg-primary-700"
                                                 >
-                                                    Apply
+                                                    สมัครงาน
                                                 </button>
                                             </div>
                                         ) : null // Employers or Admin can't apply to jobs here. 
                                     ) : (
                                         <a href="/login" className="bg-primary-600 outline-none text-white px-6 py-2 rounded-md font-medium hover:bg-primary-700 w-full text-center mb-2">
-                                            Login to Apply
+                                            เข้าสู่ระบบเพื่อสมัครงาน
                                         </a>
                                     )}
                                 </div>

@@ -20,6 +20,7 @@ class CreateJobDto {
     location;
     jobType;
     experience;
+    requirements;
     active;
 }
 exports.CreateJobDto = CreateJobDto;
@@ -58,6 +59,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateJobDto.prototype, "experience", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateJobDto.prototype, "requirements", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),

@@ -16,6 +16,14 @@ export class JobController {
         return this.jobService.findAll(query);
     }
 
+    // ต้องอยู่ก่อน :id เพื่อไม่ให้ถูก catch โดย GET :id
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.EMPLOYER)
+    @Get('my-jobs')
+    findMyJobs(@Request() req) {
+        return this.jobService.findMyJobs(req.user.userId);
+    }
+
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.jobService.findOne(+id);

@@ -13,8 +13,16 @@ export declare class AdminService {
         employerCount: number;
         seekerCount: number;
         totalApplications: number;
+        pendingEmployerCount: number;
     }>;
     getAllUsers(): Promise<User[]>;
+    getPendingEmployers(): Promise<User[]>;
+    approveEmployer(id: number): Promise<{
+        message: string;
+    }>;
+    rejectEmployer(id: number): Promise<{
+        message: string;
+    }>;
     suspendUser(id: number): Promise<{
         message: string;
     }>;

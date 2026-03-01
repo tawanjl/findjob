@@ -55,6 +55,16 @@ export class JobService {
         return qb.getMany();
     }
 
+    // ดึงเฉพาะงานของ employer ที่ login อยู่
+    async findMyJobs(employerId: number): Promise<Job[]> {
+        const company = await this.companyService.findOneByEmployerId(employerId);
+        if (!company) return [];
+        return this.jobRepository.find({
+            where: { companyId: company.id },
+            order: { createdAt: 'DESC' },
+        });
+    }
+
     async findOne(id: number): Promise<Job> {
         const job = await this.jobRepository.findOne({ where: { id }, relations: ['company'] });
         if (!job) {

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type UserRole = 'USER' | 'EMPLOYER' | 'ADMIN';
+export type EmployerStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | null;
 
 export interface User {
     id: number;
@@ -9,6 +10,7 @@ export interface User {
     role: UserRole;
     firstName?: string;
     lastName?: string;
+    approvalStatus?: EmployerStatus;
 }
 
 interface AuthState {

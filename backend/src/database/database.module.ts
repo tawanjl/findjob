@@ -10,6 +10,8 @@ import { Application } from './entities/application.entity';
 import { Bookmark } from './entities/bookmark.entity';
 import { Post } from './entities/post.entity';
 import { Comment } from './entities/comment.entity';
+import { WorkExperience } from './entities/work-experience.entity';
+import { Education } from './entities/education.entity';
 
 @Module({
     imports: [
@@ -23,7 +25,7 @@ import { Comment } from './entities/comment.entity';
                 username: configService.get<string>('DB_USER', 'root'),
                 password: configService.get<string>('DB_PASSWORD', 'root'),
                 database: configService.get<string>('DB_NAME', 'job_portal'),
-                entities: [User, Company, Job, Resume, Skill, Application, Bookmark, Post, Comment],
+                entities: [User, Company, Job, Resume, Skill, Application, Bookmark, Post, Comment, WorkExperience, Education],
                 synchronize: true, // Only for development
             }),
         }),

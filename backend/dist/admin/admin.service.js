@@ -34,32 +34,58 @@ let AdminService = class AdminService {
         const totalApplications = await this.applicationRepository.count();
         const employerCount = await this.userRepository.count({ where: { role: user_entity_1.UserRole.EMPLOYER } });
         const seekerCount = await this.userRepository.count({ where: { role: user_entity_1.UserRole.USER } });
+        const pendingEmployerCount = await this.userRepository.count({
+            where: { role: user_entity_1.UserRole.EMPLOYER, approvalStatus: user_entity_1.EmployerStatus.PENDING },
+        });
         return {
             totalJobs,
             totalUsers,
             employerCount,
             seekerCount,
             totalApplications,
+            pendingEmployerCount,
         };
     }
     async getAllUsers() {
         return this.userRepository.find({
-            select: ['id', 'email', 'firstName', 'lastName', 'role', 'createdAt'],
+            select: ['id', 'email', 'firstName', 'lastName', 'role', 'approvalStatus', 'createdAt'],
         });
+    }
+    async getPendingEmployers() {
+        return this.userRepository.find({
+            where: { role: user_entity_1.UserRole.EMPLOYER, approvalStatus: user_entity_1.EmployerStatus.PENDING },
+            select: ['id', 'email', 'firstName', 'lastName', 'role', 'approvalStatus', 'createdAt',
+                'employerPhone', 'companyNameRequest', 'businessType', 'employerNote'],
+            order: { createdAt: 'ASC' },
+        });
+    }
+    async approveEmployer(id) {
+        const user = await this.userRepository.findOne({ where: { id, role: user_entity_1.UserRole.EMPLOYER } });
+        if (!user)
+            throw new common_1.NotFoundException('ไม่พบบัญชีนายจ้างนี้');
+        await this.userRepository.update(id, { approvalStatus: user_entity_1.EmployerStatus.APPROVED });
+        return { message: 'อนุมัตินายจ้างเรียบร้อยแล้ว' };
+    }
+    async rejectEmployer(id) {
+        const user = await this.userRepository.findOne({ where: { id, role: user_entity_1.UserRole.EMPLOYER } });
+        if (!user)
+            throw new common_1.NotFoundException('ไม่พบบัญชีนายจ้างนี้');
+        await this.userRepository.update(id, { approvalStatus: user_entity_1.EmployerStatus.REJECTED });
+        return { message: 'ปฏิเสธนายจ้างเรียบร้อยแล้ว' };
     }
     async suspendUser(id) {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user)
-            throw new common_1.NotFoundException('User not found');
+            throw new common_1.NotFoundException('ไม่พบผู้ใช้งานนี้');
         await this.userRepository.delete(id);
-        return { message: 'User deleted/suspended successfully' };
+        return { message: 'ลบ/ระงับผู้ใช้งานเรียบร้อยแล้ว' };
     }
     async deleteJob(id) {
         const job = await this.jobRepository.findOne({ where: { id } });
         if (!job)
-            throw new common_1.NotFoundException('Job not found');
+            throw new common_1.NotFoundException('ไม่พบงานนี้');
         await this.jobRepository.delete(id);
-        return { message: 'Job deleted successfully' };
+        return { message: 'ลบงานเรียบร้อยแล้ว' };
     }
 };
 exports.AdminService = AdminService;

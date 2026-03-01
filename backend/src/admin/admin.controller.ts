@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Delete, Patch, Param, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -19,6 +19,24 @@ export class AdminController {
     @Get('users')
     getAllUsers() {
         return this.adminService.getAllUsers();
+    }
+
+    // รายชื่อนายจ้างที่รออนุมัติ
+    @Get('employers/pending')
+    getPendingEmployers() {
+        return this.adminService.getPendingEmployers();
+    }
+
+    // อนุมัตินายจ้าง
+    @Patch('employers/:id/approve')
+    approveEmployer(@Param('id') id: string) {
+        return this.adminService.approveEmployer(+id);
+    }
+
+    // ปฏิเสธนายจ้าง
+    @Patch('employers/:id/reject')
+    rejectEmployer(@Param('id') id: string) {
+        return this.adminService.rejectEmployer(+id);
     }
 
     @Delete('user/:id')

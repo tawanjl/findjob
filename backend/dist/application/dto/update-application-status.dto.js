@@ -14,6 +14,7 @@ const class_validator_1 = require("class-validator");
 const application_entity_1 = require("../../database/entities/application.entity");
 class UpdateApplicationStatusDto {
     status;
+    employerReply;
 }
 exports.UpdateApplicationStatusDto = UpdateApplicationStatusDto;
 __decorate([
@@ -21,4 +22,9 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateApplicationStatusDto.prototype, "status", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateApplicationStatusDto.prototype, "employerReply", void 0);
 //# sourceMappingURL=update-application-status.dto.js.map

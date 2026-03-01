@@ -5,4 +5,8 @@ export declare class RegisterDto {
     role?: UserRole;
     firstName?: string;
     lastName?: string;
+    employerPhone?: string;
+    companyNameRequest?: string;
+    businessType?: string;
+    employerNote?: string;
 }

@@ -21,4 +21,21 @@ export class RegisterDto {
     @IsOptional()
     @IsString()
     lastName?: string;
+
+    // ข้อมูลเพิ่มเติมสำหรับนายจ้าง
+    @IsOptional()
+    @IsString()
+    employerPhone?: string;
+
+    @IsOptional()
+    @IsString()
+    companyNameRequest?: string;
+
+    @IsOptional()
+    @IsString()
+    businessType?: string;
+
+    @IsOptional()
+    @IsString()
+    employerNote?: string;
 }

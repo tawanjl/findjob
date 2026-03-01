@@ -51,6 +51,12 @@ let ApplicationService = class ApplicationService {
             relations: ['job', 'job.company'],
         });
     }
+    async checkApplication(userId, jobId) {
+        const existing = await this.applicationRepository.findOne({
+            where: { userId, jobId },
+        });
+        return { applied: !!existing };
+    }
     async findApplicantsForJob(employerId, jobId) {
         const job = await this.jobRepository.findOne({ where: { id: jobId }, relations: ['company'] });
         if (!job)
@@ -76,6 +82,9 @@ let ApplicationService = class ApplicationService {
             throw new common_1.UnauthorizedException('You can only update applicants for your own jobs');
         }
         application.status = updateStatusDto.status;
+        if (updateStatusDto.employerReply !== undefined) {
+            application.employerReply = updateStatusDto.employerReply;
+        }
         return this.applicationRepository.save(application);
     }
 };

@@ -11,6 +11,9 @@ export declare class ApplicationService {
     constructor(applicationRepository: Repository<Application>, jobRepository: Repository<Job>, companyService: CompanyService);
     apply(userId: number, createApplicationDto: CreateApplicationDto): Promise<Application>;
     findMyApplications(userId: number): Promise<Application[]>;
+    checkApplication(userId: number, jobId: number): Promise<{
+        applied: boolean;
+    }>;
     findApplicantsForJob(employerId: number, jobId: number): Promise<Application[]>;
     updateStatus(employerId: number, applicationId: number, updateStatusDto: UpdateApplicationStatusDto): Promise<Application>;
 }

@@ -6,6 +6,7 @@ interface Applicant {
     id: number;
     status: string;
     coverLetter: string;
+    employerReply?: string;
     createdAt: string;
     user: {
         firstName: string;
@@ -22,6 +23,7 @@ export const JobApplicants = () => {
     const [applicants, setApplicants] = useState<Applicant[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [editStates, setEditStates] = useState<Record<number, { status: string; reply: string }>>({});
 
     useEffect(() => {
         fetchApplicants();
@@ -39,22 +41,34 @@ export const JobApplicants = () => {
         }
     };
 
-    const handleStatusChange = async (applicationId: number, newStatus: string) => {
+    const handleUpdate = async (app: Applicant) => {
+        const payload = editStates[app.id] || { status: app.status, reply: app.employerReply || '' };
         try {
-            await api.patch(`/applications/${applicationId}/status`, { status: newStatus });
-            // Update local state to reflect change
-            setApplicants(applicants.map(app =>
-                app.id === applicationId ? { ...app, status: newStatus } : app
+            await api.patch(`/applications/${app.id}/status`, { status: payload.status, employerReply: payload.reply });
+            setApplicants(applicants.map(a =>
+                a.id === app.id ? { ...a, status: payload.status, employerReply: payload.reply } : a
             ));
+            alert('อัปเดตข้อมูลเรียบร้อยแล้ว');
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Failed to update status');
+            alert(err.response?.data?.message || 'Failed to update');
         }
+    };
+
+    const handleEditChange = (app: Applicant, field: 'status' | 'reply', value: string) => {
+        setEditStates(prev => ({
+            ...prev,
+            [app.id]: {
+                ...(prev[app.id] || { status: app.status, reply: app.employerReply || '' }),
+                [field]: value
+            }
+        }));
     };
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case 'REVIEWING': return 'bg-blue-100 text-blue-800 border-blue-200';
-            case 'ACCEPTED': return 'bg-green-100 text-green-800 border-green-200';
+            case 'SHORTLISTED': return 'bg-blue-100 text-blue-800 border-blue-200';
+            case 'INTERVIEW': return 'bg-purple-100 text-purple-800 border-purple-200';
+            case 'HIRED': return 'bg-green-100 text-green-800 border-green-200';
             case 'REJECTED': return 'bg-red-100 text-red-800 border-red-200';
             default: return 'bg-yellow-100 text-yellow-800 border-yellow-200'; // PENDING
         }
@@ -94,8 +108,9 @@ export const JobApplicants = () => {
                 <div className="space-y-4">
                     {applicants.map(applicant => (
                         <div key={applicant.id} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                            <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-                                <div className="flex-1">
+                            <div className="flex flex-col gap-6">
+                                {/* Top: Applicant Info */}
+                                <div>
                                     <div className="flex items-center gap-3 mb-2">
                                         <h3 className="text-xl font-bold text-gray-900">
                                             {applicant.user.firstName} {applicant.user.lastName}
@@ -104,7 +119,7 @@ export const JobApplicants = () => {
                                             {applicant.status}
                                         </span>
                                     </div>
-                                    <p className="text-gray-600 text-sm mb-3">📧 {applicant.user.email} • Applied on {new Date(applicant.createdAt).toLocaleDateString()}</p>
+                                    <p className="text-gray-600 text-sm mb-3">{applicant.user.email} • Applied on {new Date(applicant.createdAt).toLocaleDateString()}</p>
 
                                     <div className="bg-gray-50 p-4 rounded-md border border-gray-100 mb-4">
                                         <h4 className="text-sm font-semibold text-gray-700 mb-2">Cover Letter</h4>
@@ -126,18 +141,43 @@ export const JobApplicants = () => {
                                     )}
                                 </div>
 
-                                <div className="w-full md:w-48 flex-shrink-0">
-                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Update Status</label>
-                                    <select
-                                        value={applicant.status}
-                                        onChange={(e) => handleStatusChange(applicant.id, e.target.value)}
-                                        className="w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm py-2"
-                                    >
-                                        <option value="PENDING">Pending</option>
-                                        <option value="REVIEWING">Reviewing</option>
-                                        <option value="ACCEPTED">Accepted</option>
-                                        <option value="REJECTED">Rejected</option>
-                                    </select>
+                                {/* Bottom: Update Status & Reply */}
+                                <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div className="md:col-span-1">
+                                            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Update Status</label>
+                                            <select
+                                                value={editStates[applicant.id]?.status || applicant.status}
+                                                onChange={(e) => handleEditChange(applicant, 'status', e.target.value)}
+                                                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black text-sm py-2"
+                                            >
+                                                <option value="PENDING">Pending (รอพิจารณา)</option>
+                                                <option value="SHORTLISTED">Shortlisted (ผ่านรอบแรก)</option>
+                                                <option value="INTERVIEW">Interview (นัดสัมภาษณ์)</option>
+                                                <option value="HIRED">Hired (รับเข้าทำงาน)</option>
+                                                <option value="REJECTED">Rejected (ปฏิเสธ)</option>
+                                            </select>
+                                        </div>
+                                        <div className="md:col-span-3">
+                                            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Message to Applicant</label>
+                                            <textarea
+                                                rows={5}
+                                                placeholder="Type a specific message or feedback for the applicant (optional)..."
+                                                value={editStates[applicant.id]?.reply ?? (applicant.employerReply || '')}
+                                                onChange={(e) => handleEditChange(applicant, 'reply', e.target.value)}
+                                                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black text-sm py-2 px-3 resize-y min-h-[120px]"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end mt-2">
+                                        <button
+                                            onClick={() => handleUpdate(applicant)}
+                                            className="bg-black hover:bg-gray-800 text-white font-medium text-sm py-2.5 px-6 rounded-lg transition-colors"
+                                        >
+                                            Save Changes
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

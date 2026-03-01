@@ -29,6 +29,9 @@ let JobController = class JobController {
     findAll(query) {
         return this.jobService.findAll(query);
     }
+    findMyJobs(req) {
+        return this.jobService.findMyJobs(req.user.userId);
+    }
     findOne(id) {
         return this.jobService.findOne(+id);
     }
@@ -50,6 +53,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], JobController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
+    (0, common_1.Get)('my-jobs'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], JobController.prototype, "findMyJobs", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

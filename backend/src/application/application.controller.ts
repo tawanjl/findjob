@@ -24,6 +24,12 @@ export class ApplicationController {
         return this.applicationService.findMyApplications(req.user.userId);
     }
 
+    @Roles(UserRole.USER)
+    @Get('check/:jobId')
+    checkApplication(@Request() req, @Param('jobId') jobId: string) {
+        return this.applicationService.checkApplication(req.user.userId, +jobId);
+    }
+
     @Roles(UserRole.EMPLOYER)
     @Get('job/:jobId')
     findApplicantsForJob(@Request() req, @Param('jobId') jobId: string) {

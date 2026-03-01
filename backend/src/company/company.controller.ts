@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, UseGuards, Request, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Request, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -11,29 +11,46 @@ import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../database/entities/user.entity';
 
 @Controller('company')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class CompanyController {
     constructor(private readonly companyService: CompanyService) { }
 
     @Post()
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRole.EMPLOYER)
     create(@Request() req, @Body() createCompanyDto: CreateCompanyDto) {
         return this.companyService.create(req.user.userId, createCompanyDto);
     }
 
     @Get('my-profile')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRole.EMPLOYER)
     findOne(@Request() req) {
         return this.companyService.findOneByEmployerId(req.user.userId);
     }
 
+    // สถิติ Employer Dashboard
+    @Get('my-stats')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.EMPLOYER)
+    getStats(@Request() req) {
+        return this.companyService.getEmployerStats(req.user.userId);
+    }
+
+    // Public: ดูโปรไฟล์บริษัทโดย id (ผู้หางานสามารถดูได้)
+    @Get(':id')
+    findById(@Param('id') id: string) {
+        return this.companyService.findOneById(+id);
+    }
+
     @Patch()
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRole.EMPLOYER)
     update(@Request() req, @Body() updateCompanyDto: UpdateCompanyDto) {
         return this.companyService.update(req.user.userId, updateCompanyDto);
     }
 
     @Post('logo')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRole.EMPLOYER)
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
@@ -49,17 +66,15 @@ export class CompanyController {
             }
             cb(null, true);
         },
-        limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+        limits: { fileSize: 5 * 1024 * 1024 }
     }))
     uploadLogo(@Request() req, @UploadedFile() file: Express.Multer.File) {
-        if (!file) {
-            throw new BadRequestException('File is required');
-        }
-        const fileUrl = `/uploads/logos/${file.filename}`;
-        return this.companyService.updateLogo(req.user.userId, fileUrl);
+        if (!file) throw new BadRequestException('File is required');
+        return this.companyService.updateLogo(req.user.userId, `/uploads/logos/${file.filename}`);
     }
 
     @Post('banner')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRole.EMPLOYER)
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
@@ -75,13 +90,10 @@ export class CompanyController {
             }
             cb(null, true);
         },
-        limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+        limits: { fileSize: 5 * 1024 * 1024 }
     }))
     uploadBanner(@Request() req, @UploadedFile() file: Express.Multer.File) {
-        if (!file) {
-            throw new BadRequestException('File is required');
-        }
-        const fileUrl = `/uploads/banners/${file.filename}`;
-        return this.companyService.updateBanner(req.user.userId, fileUrl);
+        if (!file) throw new BadRequestException('File is required');
+        return this.companyService.updateBanner(req.user.userId, `/uploads/banners/${file.filename}`);
     }
 }

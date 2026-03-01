@@ -35,6 +35,9 @@ export class Job {
     @Column({ nullable: true })
     experience: string;
 
+    @Column({ type: 'text', nullable: true })
+    requirements: string;
+
     @Column({ default: true })
     active: boolean;
 

@@ -47,20 +47,20 @@ export const PostDetail = () => {
             setCommentText('');
             fetchPost();
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Failed to post comment');
+            alert(err.response?.data?.message || 'ไม่สามารถโพสต์ความคิดเห็นได้');
         } finally {
             setSubmitting(false);
         }
     };
 
     const handleDeletePost = async () => {
-        if (!confirm('Delete this post?')) return;
+        if (!confirm('คุณต้องการลบโพสต์นี้หรือไม่?')) return;
         await api.delete(`/community/posts/${id}`);
         navigate('/community');
     };
 
     const handleDeleteComment = async (commentId: number) => {
-        if (!confirm('Delete this comment?')) return;
+        if (!confirm('คุณต้องการลบความคิดเห็นนี้หรือไม่?')) return;
         await api.delete(`/community/comments/${commentId}`);
         fetchPost();
     };
@@ -86,7 +86,7 @@ export const PostDetail = () => {
         <div className="max-w-3xl mx-auto space-y-8">
             {/* Back */}
             <Link to="/community" className="text-sm text-gray-500 hover:text-gray-800 flex items-center gap-1">
-                ← Back to Community
+                ← กลับไปหน้าชุมชน
             </Link>
 
             {/* Post */}
@@ -95,8 +95,8 @@ export const PostDetail = () => {
                     <div>
                         <h1 className="text-2xl font-extrabold text-gray-900">{post.title}</h1>
                         <div className="flex items-center gap-3 mt-2 text-sm text-gray-400">
-                            <span>👤 {getDisplayName(post.user)}</span>
-                            <span>🕒 {new Date(post.createdAt).toLocaleDateString()}</span>
+                            <span> {getDisplayName(post.user)}</span>
+                            <span> {new Date(post.createdAt).toLocaleDateString()}</span>
                         </div>
                     </div>
                     {user && user.id === post.userId && (
@@ -104,7 +104,7 @@ export const PostDetail = () => {
                             onClick={handleDeletePost}
                             className="text-red-400 hover:text-red-600 text-sm font-medium transition-colors"
                         >
-                            Delete post
+                            ลบโพสต์
                         </button>
                     )}
                 </div>
@@ -113,10 +113,10 @@ export const PostDetail = () => {
 
             {/* Comments */}
             <div className="space-y-4">
-                <h2 className="text-xl font-bold text-gray-900">💬 Comments ({post.comments.length})</h2>
+                <h2 className="text-xl font-bold text-gray-900">ความคิดเห็น ({post.comments.length})</h2>
 
                 {post.comments.length === 0 ? (
-                    <p className="text-gray-400 text-sm">No comments yet. Be the first!</p>
+                    <p className="text-gray-400 text-sm">ยังไม่มีความคิดเห็น. มาเป็นคนแรกที่แสดงความคิดเห็นกันเถอะ!</p>
                 ) : (
                     post.comments.map(comment => (
                         <div key={comment.id} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex justify-between items-start gap-4">
@@ -131,7 +131,7 @@ export const PostDetail = () => {
                                 <button
                                     onClick={() => handleDeleteComment(comment.id)}
                                     className="text-gray-300 hover:text-red-500 transition-colors shrink-0 mt-1"
-                                    title="Delete comment"
+                                    title="ลบความคิดเห็น"
                                 >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -146,9 +146,9 @@ export const PostDetail = () => {
             {/* Comment Form */}
             {user ? (
                 <form onSubmit={handleAddComment} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 className="font-semibold text-gray-800">Leave a comment</h3>
+                    <h3 className="font-semibold text-gray-800">แสดงความคิดเห็น</h3>
                     <textarea
-                        placeholder="Write your comment..."
+                        placeholder="เขียนความคิดเห็นของคุณ..."
                         rows={3}
                         className="w-full border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-400 focus:border-transparent outline-none resize-none"
                         value={commentText}
@@ -160,13 +160,13 @@ export const PostDetail = () => {
                             disabled={submitting || !commentText.trim()}
                             className="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50 transition-colors"
                         >
-                            {submitting ? 'Posting...' : 'Comment'}
+                            {submitting ? 'กำลังโพสต์...' : 'โพสต์'}
                         </button>
                     </div>
                 </form>
             ) : (
                 <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-center text-sm text-gray-500">
-                    <Link to="/login" className="text-primary-600 font-medium hover:underline">Sign in</Link> to leave a comment.
+                    <Link to="/login" className="text-primary-600 font-medium hover:underline">เข้าสู่ระบบ</Link> เพื่อแสดงความคิดเห็น
                 </div>
             )}
         </div>

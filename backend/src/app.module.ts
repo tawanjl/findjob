@@ -12,6 +12,8 @@ import { ResumeModule } from './resume/resume.module';
 import { AdminModule } from './admin/admin.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { CommunityModule } from './community/community.module';
+import { WorkExperienceModule } from './work-experience/work-experience.module';
+import { EducationModule } from './education/education.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -38,6 +40,8 @@ import * as Joi from 'joi';
         AdminModule,
         BookmarkModule,
         CommunityModule,
+        WorkExperienceModule,
+        EducationModule,
     ],
     controllers: [AppController],
     providers: [AppService],

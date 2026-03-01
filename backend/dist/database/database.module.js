@@ -19,6 +19,8 @@ const application_entity_1 = require("./entities/application.entity");
 const bookmark_entity_1 = require("./entities/bookmark.entity");
 const post_entity_1 = require("./entities/post.entity");
 const comment_entity_1 = require("./entities/comment.entity");
+const work_experience_entity_1 = require("./entities/work-experience.entity");
+const education_entity_1 = require("./entities/education.entity");
 let DatabaseModule = class DatabaseModule {
 };
 exports.DatabaseModule = DatabaseModule;
@@ -35,7 +37,7 @@ exports.DatabaseModule = DatabaseModule = __decorate([
                     username: configService.get('DB_USER', 'root'),
                     password: configService.get('DB_PASSWORD', 'root'),
                     database: configService.get('DB_NAME', 'job_portal'),
-                    entities: [user_entity_1.User, company_entity_1.Company, job_entity_1.Job, resume_entity_1.Resume, skill_entity_1.Skill, application_entity_1.Application, bookmark_entity_1.Bookmark, post_entity_1.Post, comment_entity_1.Comment],
+                    entities: [user_entity_1.User, company_entity_1.Company, job_entity_1.Job, resume_entity_1.Resume, skill_entity_1.Skill, application_entity_1.Application, bookmark_entity_1.Bookmark, post_entity_1.Post, comment_entity_1.Comment, work_experience_entity_1.WorkExperience, education_entity_1.Education],
                     synchronize: true,
                 }),
             }),

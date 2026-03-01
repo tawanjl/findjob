@@ -26,6 +26,9 @@ export class Application {
     status: ApplicationStatus;
 
     @Column({ type: 'text', nullable: true })
+    employerReply: string;
+
+    @Column({ type: 'text', nullable: true })
     coverLetter: string;
 
     @ManyToOne(() => Job, (job) => job.applications, { onDelete: 'CASCADE' })

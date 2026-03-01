@@ -12,6 +12,7 @@ export declare class Application {
     jobId: number;
     userId: number;
     status: ApplicationStatus;
+    employerReply: string;
     coverLetter: string;
     job: Job;
     user: User;

@@ -31,6 +31,10 @@ export class CreateJobDto {
     experience?: string;
 
     @IsOptional()
+    @IsString()
+    requirements?: string;
+
+    @IsOptional()
     @IsBoolean()
     active?: boolean;
 }

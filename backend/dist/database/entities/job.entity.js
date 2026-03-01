@@ -29,6 +29,7 @@ let Job = class Job {
     location;
     jobType;
     experience;
+    requirements;
     active;
     companyId;
     company;
@@ -70,6 +71,10 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Job.prototype, "experience", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], Job.prototype, "requirements", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: true }),
     __metadata("design:type", Boolean)

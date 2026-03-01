@@ -15,6 +15,7 @@ export declare class Job {
     location: string;
     jobType: JobType;
     experience: string;
+    requirements: string;
     active: boolean;
     companyId: number;
     company: Company;

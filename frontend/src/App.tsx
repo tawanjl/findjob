@@ -10,6 +10,9 @@ import { JobDetail } from './pages/JobDetail';
 import { JobApplicants } from './pages/JobApplicants';
 import { Community } from './pages/Community';
 import { PostDetail } from './pages/PostDetail';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { Profile } from './pages/Profile';
+import { CompanyProfile } from './pages/CompanyProfile';
 
 const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: string[] }) => {
   const { user } = useAuthStore();
@@ -35,17 +38,20 @@ function App() {
         <nav className="bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
-              <a href="/"><span className="font-bold text-xl text-primary-600">JobsDB Pro</span></a>
+              <a href="/"><span className="font-bold text-xl text-primary-600">JOBS</span></a>
               <div className="flex items-center gap-4">
-                <a href="/jobs" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Find Jobs</a>
-                <a href="/community" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Community</a>
+                <a href="/jobs" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">หางาน</a>
+                <a href="/community" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">ชุมชน</a>
                 {user ? (
                   <>
-                    <a href="/dashboard" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Dashboard</a>
-                    <button onClick={logout} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Logout</button>
+                    <a href="/dashboard" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">แดชบอร์ด</a>
+                    {user.role === 'ADMIN' && (
+                      <a href="/admin" className="text-amber-600 hover:text-amber-800 font-semibold transition-colors">ผู้ดูแลระบบ</a>
+                    )}
+                    <button onClick={logout} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">ออกจากระบบ</button>
                   </>
                 ) : (
-                  <a href="/login" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Sign in</a>
+                  <a href="/login" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">เข้าสู่ระบบ</a>
                 )}
               </div>
             </div>
@@ -70,8 +76,19 @@ function App() {
                 <JobApplicants />
               </ProtectedRoute>
             } />
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute allowedRoles={['USER']}>
+                <Profile />
+              </ProtectedRoute>
+            } />
             <Route path="/community" element={<Community />} />
             <Route path="/community/:id" element={<PostDetail />} />
+            <Route path="/company/:id" element={<CompanyProfile />} />
           </Routes>
         </main>
       </div>

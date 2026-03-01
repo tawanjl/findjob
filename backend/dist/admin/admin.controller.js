@@ -30,6 +30,15 @@ let AdminController = class AdminController {
     getAllUsers() {
         return this.adminService.getAllUsers();
     }
+    getPendingEmployers() {
+        return this.adminService.getPendingEmployers();
+    }
+    approveEmployer(id) {
+        return this.adminService.approveEmployer(+id);
+    }
+    rejectEmployer(id) {
+        return this.adminService.rejectEmployer(+id);
+    }
     suspendUser(id) {
         return this.adminService.suspendUser(+id);
     }
@@ -50,6 +59,26 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "getAllUsers", null);
+__decorate([
+    (0, common_1.Get)('employers/pending'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getPendingEmployers", null);
+__decorate([
+    (0, common_1.Patch)('employers/:id/approve'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "approveEmployer", null);
+__decorate([
+    (0, common_1.Patch)('employers/:id/reject'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "rejectEmployer", null);
 __decorate([
     (0, common_1.Delete)('user/:id'),
     __param(0, (0, common_1.Param)('id')),

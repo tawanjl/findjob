@@ -6,6 +6,9 @@ export declare class ApplicationController {
     constructor(applicationService: ApplicationService);
     apply(req: any, createApplicationDto: CreateApplicationDto): Promise<import("../database/entities/application.entity").Application>;
     findMyApplications(req: any): Promise<import("../database/entities/application.entity").Application[]>;
+    checkApplication(req: any, jobId: string): Promise<{
+        applied: boolean;
+    }>;
     findApplicantsForJob(req: any, jobId: string): Promise<import("../database/entities/application.entity").Application[]>;
     updateStatus(req: any, id: string, updateStatusDto: UpdateApplicationStatusDto): Promise<import("../database/entities/application.entity").Application>;
 }

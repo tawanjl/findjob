@@ -9,6 +9,7 @@ export declare class JobService {
     constructor(jobRepository: Repository<Job>, companyService: CompanyService);
     create(employerId: number, createJobDto: CreateJobDto): Promise<Job>;
     findAll(query: any): Promise<Job[]>;
+    findMyJobs(employerId: number): Promise<Job[]>;
     findOne(id: number): Promise<Job>;
     update(id: number, employerId: number, updateJobDto: UpdateJobDto): Promise<Job>;
     remove(id: number, employerId: number): Promise<void>;

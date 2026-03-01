@@ -8,8 +8,16 @@ export declare class AdminController {
         employerCount: number;
         seekerCount: number;
         totalApplications: number;
+        pendingEmployerCount: number;
     }>;
     getAllUsers(): Promise<import("../database/entities/user.entity").User[]>;
+    getPendingEmployers(): Promise<import("../database/entities/user.entity").User[]>;
+    approveEmployer(id: string): Promise<{
+        message: string;
+    }>;
+    rejectEmployer(id: string): Promise<{
+        message: string;
+    }>;
     suspendUser(id: string): Promise<{
         message: string;
     }>;

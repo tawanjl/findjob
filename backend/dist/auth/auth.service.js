@@ -47,6 +47,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const bcrypt = __importStar(require("bcrypt"));
+const user_entity_1 = require("../database/entities/user.entity");
 let AuthService = class AuthService {
     usersService;
     jwtService;
@@ -64,7 +65,15 @@ let AuthService = class AuthService {
     async login(loginDto) {
         const user = await this.validateUser(loginDto.email, loginDto.password);
         if (!user) {
-            throw new common_1.UnauthorizedException('Invalid credentials');
+            throw new common_1.UnauthorizedException('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+        }
+        if (user.role === user_entity_1.UserRole.EMPLOYER) {
+            if (user.approvalStatus === user_entity_1.EmployerStatus.PENDING) {
+                throw new common_1.ForbiddenException('บัญชีของคุณยังรอการอนุมัติจากผู้ดูแลระบบ กรุณารอสักครู่');
+            }
+            if (user.approvalStatus === user_entity_1.EmployerStatus.REJECTED) {
+                throw new common_1.ForbiddenException('บัญชีของคุณถูกปฏิเสธ กรุณาติดต่อผู้ดูแลระบบ');
+            }
         }
         const payload = { email: user.email, sub: user.id, role: user.role };
         return {
@@ -75,21 +84,33 @@ let AuthService = class AuthService {
                 role: user.role,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                approvalStatus: user.approvalStatus,
             }
         };
     }
     async register(registerDto) {
         const existingUser = await this.usersService.findByEmail(registerDto.email);
         if (existingUser) {
-            throw new common_1.UnauthorizedException('Email already in use');
+            throw new common_1.UnauthorizedException('อีเมลนี้ถูกใช้งานแล้ว');
         }
         const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+        const approvalStatus = registerDto.role === user_entity_1.UserRole.EMPLOYER
+            ? user_entity_1.EmployerStatus.PENDING
+            : null;
         const user = await this.usersService.create({
             ...registerDto,
             password: hashedPassword,
+            approvalStatus,
         });
+        if (user.role === user_entity_1.UserRole.EMPLOYER) {
+            return {
+                pending: true,
+                message: 'สมัครสมาชิกสำเร็จ บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากผู้ดูแลระบบ',
+            };
+        }
         const payload = { email: user.email, sub: user.id, role: user.role };
         return {
+            pending: false,
             access_token: this.jwtService.sign(payload),
             user: {
                 id: user.id,
@@ -97,6 +118,7 @@ let AuthService = class AuthService {
                 role: user.role,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                approvalStatus: user.approvalStatus,
             }
         };
     }

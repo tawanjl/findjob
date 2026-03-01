@@ -35,27 +35,30 @@ let CompanyController = class CompanyController {
     findOne(req) {
         return this.companyService.findOneByEmployerId(req.user.userId);
     }
+    getStats(req) {
+        return this.companyService.getEmployerStats(req.user.userId);
+    }
+    findById(id) {
+        return this.companyService.findOneById(+id);
+    }
     update(req, updateCompanyDto) {
         return this.companyService.update(req.user.userId, updateCompanyDto);
     }
     uploadLogo(req, file) {
-        if (!file) {
+        if (!file)
             throw new common_1.BadRequestException('File is required');
-        }
-        const fileUrl = `/uploads/logos/${file.filename}`;
-        return this.companyService.updateLogo(req.user.userId, fileUrl);
+        return this.companyService.updateLogo(req.user.userId, `/uploads/logos/${file.filename}`);
     }
     uploadBanner(req, file) {
-        if (!file) {
+        if (!file)
             throw new common_1.BadRequestException('File is required');
-        }
-        const fileUrl = `/uploads/banners/${file.filename}`;
-        return this.companyService.updateBanner(req.user.userId, fileUrl);
+        return this.companyService.updateBanner(req.user.userId, `/uploads/banners/${file.filename}`);
     }
 };
 exports.CompanyController = CompanyController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
@@ -65,6 +68,7 @@ __decorate([
 ], CompanyController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('my-profile'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -72,7 +76,24 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CompanyController.prototype, "findOne", null);
 __decorate([
+    (0, common_1.Get)('my-stats'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], CompanyController.prototype, "getStats", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CompanyController.prototype, "findById", null);
+__decorate([
     (0, common_1.Patch)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
@@ -82,6 +103,7 @@ __decorate([
 ], CompanyController.prototype, "update", null);
 __decorate([
     (0, common_1.Post)('logo'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
@@ -107,6 +129,7 @@ __decorate([
 ], CompanyController.prototype, "uploadLogo", null);
 __decorate([
     (0, common_1.Post)('banner'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
@@ -132,7 +155,6 @@ __decorate([
 ], CompanyController.prototype, "uploadBanner", null);
 exports.CompanyController = CompanyController = __decorate([
     (0, common_1.Controller)('company'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __metadata("design:paramtypes", [company_service_1.CompanyService])
 ], CompanyController);
 //# sourceMappingURL=company.controller.js.map

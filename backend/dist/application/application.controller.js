@@ -32,6 +32,9 @@ let ApplicationController = class ApplicationController {
     findMyApplications(req) {
         return this.applicationService.findMyApplications(req.user.userId);
     }
+    checkApplication(req, jobId) {
+        return this.applicationService.checkApplication(req.user.userId, +jobId);
+    }
     findApplicantsForJob(req, jobId) {
         return this.applicationService.findApplicantsForJob(req.user.userId, +jobId);
     }
@@ -57,6 +60,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], ApplicationController.prototype, "findMyApplications", null);
+__decorate([
+    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.USER),
+    (0, common_1.Get)('check/:jobId'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('jobId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], ApplicationController.prototype, "checkApplication", null);
 __decorate([
     (0, roles_decorator_1.Roles)(user_entity_1.UserRole.EMPLOYER),
     (0, common_1.Get)('job/:jobId'),

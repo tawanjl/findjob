@@ -44,6 +44,13 @@ export class ApplicationService {
         });
     }
 
+    async checkApplication(userId: number, jobId: number): Promise<{ applied: boolean }> {
+        const existing = await this.applicationRepository.findOne({
+            where: { userId, jobId },
+        });
+        return { applied: !!existing };
+    }
+
     async findApplicantsForJob(employerId: number, jobId: number): Promise<Application[]> {
         const job = await this.jobRepository.findOne({ where: { id: jobId }, relations: ['company'] });
         if (!job) throw new NotFoundException('Job not found');
@@ -77,6 +84,9 @@ export class ApplicationService {
         }
 
         application.status = updateStatusDto.status;
+        if (updateStatusDto.employerReply !== undefined) {
+            application.employerReply = updateStatusDto.employerReply;
+        }
         return this.applicationRepository.save(application);
     }
 }

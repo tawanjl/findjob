@@ -32,6 +32,47 @@ let UsersService = class UsersService {
         const newUser = this.userRepository.create(userData);
         return this.userRepository.save(newUser);
     }
+    async getMyProfile(userId) {
+        const user = await this.userRepository.findOne({
+            where: { id: userId },
+            relations: ['workExperiences', 'educations', 'skills', 'resume'],
+            select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                phone: true,
+                role: true,
+                bio: true,
+                location: true,
+                desiredJobTitle: true,
+                expectedSalary: true,
+                avatarUrl: true,
+                portfolioUrl: true,
+                linkedinUrl: true,
+                availableFrom: true,
+                createdAt: true,
+            },
+        });
+        if (!user)
+            throw new common_1.NotFoundException('ไม่พบผู้ใช้งาน');
+        return user;
+    }
+    async updateProfile(userId, dto) {
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+        if (!user)
+            throw new common_1.NotFoundException('ไม่พบผู้ใช้งาน');
+        Object.assign(user, dto);
+        return this.userRepository.save(user);
+    }
+    async updateAvatar(userId, avatarUrl) {
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+        if (!user)
+            throw new common_1.NotFoundException('ไม่พบผู้ใช้งาน');
+        user.avatarUrl = avatarUrl;
+        await this.userRepository.save(user);
+        return { avatarUrl };
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

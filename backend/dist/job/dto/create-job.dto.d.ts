@@ -7,5 +7,6 @@ export declare class CreateJobDto {
     location?: string;
     jobType?: JobType;
     experience?: string;
+    requirements?: string;
     active?: boolean;
 }
