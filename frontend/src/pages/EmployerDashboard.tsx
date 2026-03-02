@@ -170,7 +170,10 @@ export const EmployerDashboard = () => {
             setNewJob({ title: '', description: '', requirements: '', location: '', jobType: 'Full-time', salaryMin: '', salaryMax: '', experience: '', active: true });
             fetchJobs(); fetchStats();
             showSuccess(editingJobId ? 'อัปเดตงานเรียบร้อยแล้ว ✅' : 'ลงประกาศงานสำเร็จ ✅');
-        } catch { alert('บันทึกงานไม่สำเร็จ'); }
+        } catch (err: any) {
+            const msg = err.response?.data?.message;
+            alert('บันทึกงานไม่สำเร็จ: ' + (Array.isArray(msg) ? msg.join(', ') : (msg || 'เกิดข้อผิดพลาด')));
+        }
     };
 
     const handleEditClick = (job: any) => {

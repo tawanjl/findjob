@@ -67,7 +67,7 @@ let ApplicationService = class ApplicationService {
         }
         return this.applicationRepository.find({
             where: { jobId },
-            relations: ['user', 'user.resume'],
+            relations: ['user', 'user.resume', 'user.workExperiences', 'user.educations'],
         });
     }
     async updateStatus(employerId, applicationId, updateStatusDto) {

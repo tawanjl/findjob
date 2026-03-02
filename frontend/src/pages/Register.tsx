@@ -154,7 +154,7 @@ export const Register = () => {
                                 </div>
                                 <div>
                                     <label className="block text-xs font-medium text-gray-700 mb-1">เบอร์ติดต่อ *</label>
-                                    <input type="tel" required value={employerPhone} onChange={e => setEmployerPhone(e.target.value)} className={inputCls} placeholder="เบอร์ติดต่อ" />
+                                    <input type="tel" inputMode="numeric" required value={employerPhone} onChange={e => setEmployerPhone(e.target.value.replace(/\D/g, ''))} className={inputCls} placeholder="เบอร์ติดต่อ" />
                                 </div>
                             </div>
 

@@ -30,6 +30,7 @@ export const AdminDashboard = () => {
     const [actionLoading, setActionLoading] = useState<number | null>(null);
     const [successMessage, setSuccessMessage] = useState('');
     const [selectedEmployer, setSelectedEmployer] = useState<Employer | null>(null);
+    const [rejectTarget, setRejectTarget] = useState<Employer | null>(null);
 
     const fetchStats = () => {
         api.get('/admin/statistics').then(res => setStats(res.data));
@@ -64,7 +65,6 @@ export const AdminDashboard = () => {
     };
 
     const handleReject = async (id: number, name: string) => {
-        if (!window.confirm(`ยืนยันการปฏิเสธบัญชีของ ${name}?`)) return;
         setActionLoading(id);
         try {
             await api.patch(`/admin/employers/${id}/reject`);
@@ -75,6 +75,7 @@ export const AdminDashboard = () => {
             console.error(e);
         } finally {
             setActionLoading(null);
+            setRejectTarget(null);
         }
     };
 
@@ -255,7 +256,7 @@ export const AdminDashboard = () => {
                                                                 {actionLoading === employer.id ? '...' : '✓ อนุมัติ'}
                                                             </button>
                                                             <button
-                                                                onClick={() => handleReject(employer.id, `${employer.firstName} ${employer.lastName}`)}
+                                                                onClick={() => setRejectTarget(employer)}
                                                                 disabled={actionLoading === employer.id}
                                                                 className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none transition-colors disabled:opacity-50"
                                                             >
@@ -339,7 +340,7 @@ export const AdminDashboard = () => {
                                     ✓ อนุมัติบัญชีนี้
                                 </button>
                                 <button
-                                    onClick={() => { handleReject(emp.id, `${emp.firstName} ${emp.lastName}`); setSelectedEmployer(null); }}
+                                    onClick={() => { setSelectedEmployer(null); setRejectTarget(emp); }}
                                     disabled={actionLoading === emp.id}
                                     className="flex-1 py-2.5 text-sm font-semibold rounded-xl text-white bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50"
                                 >
@@ -350,6 +351,92 @@ export const AdminDashboard = () => {
                     </div>
                 );
             })()}
+            {rejectTarget && (
+                <div
+                    style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    onClick={() => !actionLoading && setRejectTarget(null)}
+                >
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }} />
+                    <div
+                        onClick={e => e.stopPropagation()}
+                        style={{
+                            position: 'relative', background: 'white', borderRadius: '20px',
+                            padding: '36px', maxWidth: '420px', width: '90%',
+                            boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
+                            animation: 'rejectPop 0.25s ease',
+                        }}
+                    >
+                        <style>{`@keyframes rejectPop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }`}</style>
+
+                        {/* Icon */}
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                            <div style={{
+                                width: '72px', height: '72px', borderRadius: '50%',
+                                background: 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '32px', boxShadow: '0 8px 24px rgba(220,38,38,0.35)',
+                            }}>🚫</div>
+                        </div>
+
+                        {/* Content */}
+                        <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
+                            ยืนยันการปฏิเสธบัญชี
+                        </h2>
+                        <p style={{ textAlign: 'center', color: '#6B7280', fontSize: '14px', lineHeight: 1.7, marginBottom: '20px' }}>
+                            คุณแน่ใจหรือไม่ว่าต้องการ<strong style={{ color: '#DC2626' }}>ปฏิเสธ</strong>บัญชีของ<br />
+                            <strong style={{ color: '#111827', fontSize: '16px' }}>{rejectTarget.firstName} {rejectTarget.lastName}</strong>?
+                        </p>
+
+                        {/* Info box */}
+                        <div style={{
+                            background: '#FEF2F2', border: '1px solid #FECACA',
+                            borderRadius: '12px', padding: '12px 16px', marginBottom: '24px',
+                        }}>
+                            <p style={{ fontSize: '13px', color: '#991B1B', margin: 0 }}>ชื่อบริษัท: {rejectTarget.companyNameRequest || 'ไม่ระบุชื่อบริษัท'}</p>
+                            <p style={{ fontSize: '12px', color: '#B91C1C', margin: '4px 0 0 0' }}>อีเมล: {rejectTarget.email}</p>
+                        </div>
+
+                        {/* Buttons */}
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                            <button
+                                onClick={() => setRejectTarget(null)}
+                                disabled={!!actionLoading}
+                                style={{
+                                    flex: 1, padding: '12px', borderRadius: '12px',
+                                    border: '1.5px solid #E5E7EB', background: 'white',
+                                    color: '#374151', fontWeight: 600, fontSize: '15px',
+                                    cursor: actionLoading ? 'not-allowed' : 'pointer',
+                                }}
+                            >
+                                ยกเลิก
+                            </button>
+                            <button
+                                onClick={() => handleReject(rejectTarget.id, `${rejectTarget.firstName} ${rejectTarget.lastName}`)}
+                                disabled={actionLoading === rejectTarget.id}
+                                style={{
+                                    flex: 1, padding: '12px', borderRadius: '12px',
+                                    background: actionLoading ? '#9CA3AF' : '#DC2626',
+                                    color: 'white', fontWeight: 700, fontSize: '15px',
+                                    cursor: actionLoading ? 'not-allowed' : 'pointer',
+                                    border: 'none',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                                    boxShadow: actionLoading ? 'none' : '0 4px 14px rgba(220,38,38,0.4)',
+                                }}
+                            >
+                                {actionLoading === rejectTarget.id ? (
+                                    <>
+                                        <svg style={{ width: '16px', height: '16px', animation: 'spin 1s linear infinite' }} viewBox="0 0 24 24" fill="none">
+                                            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                                            <path d="M12 2a10 10 0 0 1 10 10" stroke="white" strokeWidth="3" strokeLinecap="round" />
+                                        </svg>
+                                        กำลังดำเนินการ...
+                                    </>
+                                ) : '✕ ยืนยันปฏิเสธ'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

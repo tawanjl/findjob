@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/axios';
 import { useAuthStore } from '../store/authStore';
+import type { User } from '../store/authStore';
 
 // ---- Types ----
 interface Profile {
@@ -36,7 +37,7 @@ const fmtDate = (d: string) => d ? new Date(d).toLocaleDateString('th-TH', { yea
 
 // ---- Component ----
 export const Profile = () => {
-    const { user } = useAuthStore();
+    const { user, setAuth, token } = useAuthStore();
     const [profile, setProfile] = useState<Profile | null>(null);
     const [tab, setTab] = useState<'info' | 'work' | 'edu'>('info');
     const [saving, setSaving] = useState(false);
@@ -75,12 +76,35 @@ export const Profile = () => {
     const handleSaveInfo = async () => {
         setSaving(true);
         try {
-            await api.patch('/users/profile', form);
+            // Filter out empty strings and invalid numbers to prevent backend validation errors
+            const payload: any = { ...form };
+            Object.keys(payload).forEach(key => {
+                if (payload[key] === '' || payload[key] === null) {
+                    delete payload[key];
+                }
+            });
+            if (payload.expectedSalary === 0 || isNaN(payload.expectedSalary)) {
+                delete payload.expectedSalary;
+            }
+
+            await api.patch('/users/profile', payload);
             setSaveMsg('บันทึกข้อมูลเรียบร้อยแล้ว ✅');
+
+            // Sync with authStore for Dashboard greeting
+            if (user && token) {
+                const updatedUser: User = {
+                    ...user,
+                    firstName: payload.firstName || user.firstName,
+                    lastName: payload.lastName || user.lastName
+                };
+                setAuth(updatedUser, token);
+            }
+
             fetchProfile();
             setTimeout(() => setSaveMsg(''), 3000);
-        } catch {
-            setSaveMsg('เกิดข้อผิดพลาด กรุณาลองใหม่');
+        } catch (err: any) {
+            const msg = err.response?.data?.message;
+            setSaveMsg(Array.isArray(msg) ? msg[0] : (msg || 'เกิดข้อผิดพลาด กรุณาลองใหม่'));
         } finally { setSaving(false); }
     };
 
@@ -95,6 +119,12 @@ export const Profile = () => {
             const { data } = await api.post('/users/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             setForm(p => ({ ...p, avatarUrl: data.avatarUrl }));
             setProfile(prev => prev ? { ...prev, avatarUrl: `http://localhost:3000${data.avatarUrl}` } : prev);
+
+            // Sync avatar with authStore if needed (though not currently used in greeting)
+            if (user && token) {
+                setAuth({ ...user }, token);
+            }
+
             setAvatarMsg({ type: 'success', text: 'อัปโหลดรูปโปรไฟล์สำเร็จแล้ว! 🎉' });
             setTimeout(() => setAvatarMsg(null), 4000);
         } catch (err: any) {
@@ -246,7 +276,7 @@ export const Profile = () => {
                                 </div>
                                 <div>
                                     <label className={labelCls}>เงินเดือนที่คาดหวัง (บาท/เดือน)</label>
-                                    <input type="number" className={inputCls} value={form.expectedSalary ?? ''} onChange={e => setForm(p => ({ ...p, expectedSalary: +e.target.value }))} placeholder="30000" />
+                                    <input type="number" className={inputCls} min="0" value={form.expectedSalary ?? ''} onChange={e => setForm(p => ({ ...p, expectedSalary: e.target.value ? +e.target.value : undefined }))} placeholder="30000" />
                                 </div>
                             </div>
 

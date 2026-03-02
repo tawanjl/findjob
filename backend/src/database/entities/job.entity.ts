@@ -7,6 +7,8 @@ export enum JobType {
     FULL_TIME = 'Full-time',
     PART_TIME = 'Part-time',
     REMOTE = 'Remote',
+    CONTRACT = 'Contract',
+    INTERNSHIP = 'Internship',
 }
 
 @Entity('jobs')
