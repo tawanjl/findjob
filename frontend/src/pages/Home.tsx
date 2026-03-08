@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../lib/axios';
+import { getImageUrl } from '../lib/url';
 
 interface Job {
     id: number;
@@ -122,7 +123,7 @@ export const Home = () => {
                             <Link key={job.id} to={`/jobs/${job.id}`} className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:border-primary-100 transition-all flex flex-col h-full">
                                 <div className="w-12 h-12 bg-white rounded-lg border border-gray-100 flex items-center justify-center p-2 mb-4 overflow-hidden shadow-sm group-hover:scale-105 transition-transform">
                                     {job.company.logoUrl ? (
-                                        <img src={`http://localhost:3000${job.company.logoUrl}`} alt={job.company.name} className="w-full h-full object-contain" />
+                                        <img src={getImageUrl(job.company.logoUrl)} alt={job.company.name} className="w-full h-full object-contain" />
                                     ) : (
                                         <span className="text-xl font-bold text-gray-300">{job.company.name.charAt(0)}</span>
                                     )}

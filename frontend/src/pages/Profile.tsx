@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/axios';
+import { getImageUrl } from '../lib/url';
 import { useAuthStore } from '../store/authStore';
 import type { User } from '../store/authStore';
 
@@ -118,7 +119,7 @@ export const Profile = () => {
         try {
             const { data } = await api.post('/users/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             setForm(p => ({ ...p, avatarUrl: data.avatarUrl }));
-            setProfile(prev => prev ? { ...prev, avatarUrl: `http://localhost:3000${data.avatarUrl}` } : prev);
+            setProfile(prev => prev ? { ...prev, avatarUrl: getImageUrl(data.avatarUrl) } : prev);
 
             // Sync avatar with authStore if needed (though not currently used in greeting)
             if (user && token) {
@@ -190,7 +191,7 @@ export const Profile = () => {
                     <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500 overflow-hidden">
                         {profile?.avatarUrl
                             ? <img
-                                src={profile.avatarUrl.startsWith('http') ? profile.avatarUrl : `http://localhost:3000${profile.avatarUrl}`}
+                                src={getImageUrl(profile.avatarUrl)}
                                 alt="avatar"
                                 className="w-full h-full object-cover"
                             />
@@ -305,7 +306,7 @@ export const Profile = () => {
                                         <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp" className="hidden" onChange={handleAvatarUpload} disabled={avatarUploading} />
                                         <div className="w-16 h-16 rounded-full border-2 border-dashed border-gray-300 group-hover:border-gray-600 bg-gray-50 overflow-hidden flex items-center justify-center flex-shrink-0 transition-colors">
                                             {form.avatarUrl
-                                                ? <img src={form.avatarUrl.startsWith('http') ? form.avatarUrl : `http://localhost:3000${form.avatarUrl}`} alt="avatar" className="w-full h-full object-cover" />
+                                                ? <img src={getImageUrl(form.avatarUrl)} alt="avatar" className="w-full h-full object-cover" />
                                                 : <span className="text-2xl">{avatarUploading ? '⏳' : '📷'}</span>}
                                         </div>
                                         <div>

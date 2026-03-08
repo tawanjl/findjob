@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '../lib/axios';
+import { getImageUrl } from '../lib/url';
 import { useAuthStore } from '../store/authStore';
 
 interface Job {
@@ -153,7 +154,7 @@ export const JobBoard = () => {
                                     <div className="flex-shrink-0 w-16 h-16 rounded overflow-hidden border bg-gray-50 flex items-center justify-center mt-1">
                                         {job.company.logoUrl ? (
                                             <img
-                                                src={job.company.logoUrl.startsWith('http') ? job.company.logoUrl : `http://localhost:3000${job.company.logoUrl}`}
+                                                src={getImageUrl(job.company.logoUrl)}
                                                 alt={job.company.name}
                                                 className="w-full h-full object-cover"
                                             />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../lib/axios';
+import { getImageUrl } from '../lib/url';
 
 interface Applicant {
     id: number;
@@ -229,7 +230,7 @@ export const JobApplicants = () => {
                                         <div className="w-32 h-32 mx-auto rounded-full bg-gray-200 border-4 border-white shadow-md overflow-hidden flex items-center justify-center text-4xl text-gray-400 font-bold mb-4">
                                             {selectedApplicantProfile.user.avatarUrl ? (
                                                 <img
-                                                    src={selectedApplicantProfile.user.avatarUrl.startsWith('http') ? selectedApplicantProfile.user.avatarUrl : `http://localhost:3000${selectedApplicantProfile.user.avatarUrl}`}
+                                                    src={getImageUrl(selectedApplicantProfile.user.avatarUrl)}
                                                     alt="Avatar"
                                                     className="w-full h-full object-cover"
                                                 />

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../lib/axios';
+import { getImageUrl } from '../lib/url';
 import { useAuthStore } from '../store/authStore';
 
 interface Application {
@@ -85,7 +86,7 @@ export const UserDashboard = () => {
         : user?.firstName ? `${user.firstName} ${user.lastName ?? ''}`.trim() : user?.email ?? '';
     const initials = (profileData?.firstName?.[0] ?? user?.firstName?.[0] ?? user?.email?.[0] ?? '?').toUpperCase();
     const avatarSrc = profileData?.avatarUrl
-        ? (profileData.avatarUrl.startsWith('http') ? profileData.avatarUrl : `http://localhost:3000${profileData.avatarUrl}`)
+        ? getImageUrl(profileData.avatarUrl)
         : null;
 
     const statsCards = [
