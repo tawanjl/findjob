@@ -5,9 +5,10 @@ import { CompanyController } from './company.controller';
 import { Company } from '../database/entities/company.entity';
 import { Job } from '../database/entities/job.entity';
 import { Application } from '../database/entities/application.entity';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Company, Job, Application])],
+  imports: [TypeOrmModule.forFeature([Company, Job, Application]), CloudinaryModule],
   providers: [CompanyService],
   controllers: [CompanyController],
   exports: [CompanyService],

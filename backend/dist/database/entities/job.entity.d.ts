@@ -4,7 +4,9 @@ import { Bookmark } from './bookmark.entity';
 export declare enum JobType {
     FULL_TIME = "Full-time",
     PART_TIME = "Part-time",
-    REMOTE = "Remote"
+    REMOTE = "Remote",
+    CONTRACT = "Contract",
+    INTERNSHIP = "Internship"
 }
 export declare class Job {
     id: number;

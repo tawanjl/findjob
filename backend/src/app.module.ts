@@ -14,6 +14,7 @@ import { BookmarkModule } from './bookmark/bookmark.module';
 import { CommunityModule } from './community/community.module';
 import { WorkExperienceModule } from './work-experience/work-experience.module';
 import { EducationModule } from './education/education.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -42,6 +43,7 @@ import * as Joi from 'joi';
         CommunityModule,
         WorkExperienceModule,
         EducationModule,
+        CloudinaryModule,
     ],
     controllers: [AppController],
     providers: [AppService],

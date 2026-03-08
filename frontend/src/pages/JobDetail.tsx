@@ -199,7 +199,7 @@ export const JobDetail = () => {
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}>
                                 {job.company.logoUrl ? (
-                                    <img src={`http://localhost:3000${job.company.logoUrl}`} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <img src={job.company.logoUrl.startsWith('http') ? job.company.logoUrl : `http://localhost:3000${job.company.logoUrl}`} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 ) : (
                                     <span style={{ fontSize: '20px' }}>🏢</span>
                                 )}
@@ -295,7 +295,7 @@ export const JobDetail = () => {
                 {job.company.bannerUrl && (
                     <div className="w-full h-48 sm:h-64 bg-gray-100 overflow-hidden border-b border-gray-200">
                         <img
-                            src={`http://localhost:3000${job.company.bannerUrl}`}
+                            src={job.company.bannerUrl.startsWith('http') ? job.company.bannerUrl : `http://localhost:3000${job.company.bannerUrl}`}
                             alt={`${job.company.name} banner`}
                             className="w-full h-full object-cover"
                         />
@@ -307,7 +307,7 @@ export const JobDetail = () => {
                         <div className={`w-24 h-24 sm:w-28 sm:h-28 bg-white border-4 border-white rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center shadow-md ${job.company.bannerUrl ? '-mt-16 sm:-mt-20 relative z-10' : ''}`}>
                             {job.company.logoUrl ? (
                                 <img
-                                    src={`http://localhost:3000${job.company.logoUrl}`}
+                                    src={job.company.logoUrl.startsWith('http') ? job.company.logoUrl : `http://localhost:3000${job.company.logoUrl}`}
                                     alt={`${job.company.name} logo`}
                                     className="w-full h-full object-cover"
                                 />

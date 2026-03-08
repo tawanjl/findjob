@@ -223,7 +223,7 @@ export const EmployerDashboard = () => {
                         {/* Banner */}
                         <div className="relative w-full h-40 bg-gradient-to-r from-gray-700 to-gray-900">
                             {profile.bannerUrl && (
-                                <img src={`http://localhost:3000${profile.bannerUrl}`} alt="banner" className="w-full h-full object-cover" />
+                                <img src={profile.bannerUrl.startsWith('http') ? profile.bannerUrl : `http://localhost:3000${profile.bannerUrl}`} alt="banner" className="w-full h-full object-cover" />
                             )}
                             <div className="absolute bottom-3 right-3 flex gap-2 z-20">
                                 <input type="file" id="banner-upload" accept="image/png,image/jpeg,image/jpg" className="hidden" onChange={handleBannerUpload} disabled={isUploadingBanner} />
@@ -241,7 +241,7 @@ export const EmployerDashboard = () => {
                                 <div className="flex flex-col items-center gap-1.5 -mt-14">
                                     <div className="w-20 h-20 rounded-xl border-4 border-white shadow-lg bg-white overflow-hidden flex items-center justify-center">
                                         {profile.logoUrl
-                                            ? <img src={`http://localhost:3000${profile.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
+                                            ? <img src={profile.logoUrl.startsWith('http') ? profile.logoUrl : `http://localhost:3000${profile.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
                                             : <span className="text-2xl font-bold text-gray-400">{profile.name[0]}</span>}
                                     </div>
                                     <input type="file" id="logo-upload" accept="image/png,image/jpeg,image/jpg" className="hidden" onChange={handleLogoUpload} />
@@ -411,7 +411,7 @@ export const EmployerDashboard = () => {
                                     <div className="flex gap-4 items-center min-w-0">
                                         <div className="w-12 h-12 rounded-lg border bg-white flex-shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
                                             {profile?.logoUrl
-                                                ? <img src={`http://localhost:3000${profile.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
+                                                ? <img src={profile.logoUrl.startsWith('http') ? profile.logoUrl : `http://localhost:3000${profile.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
                                                 : <span className="text-lg font-bold text-gray-300">{profile.name[0]}</span>}
                                         </div>
                                         <div className="min-w-0">

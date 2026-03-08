@@ -19,6 +19,8 @@ var JobType;
     JobType["FULL_TIME"] = "Full-time";
     JobType["PART_TIME"] = "Part-time";
     JobType["REMOTE"] = "Remote";
+    JobType["CONTRACT"] = "Contract";
+    JobType["INTERNSHIP"] = "Internship";
 })(JobType || (exports.JobType = JobType = {}));
 let Job = class Job {
     id;

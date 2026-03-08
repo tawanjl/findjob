@@ -79,7 +79,7 @@ export const CompanyProfile = () => {
                 {/* Banner */}
                 <div className="relative h-48 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900">
                     {company.bannerUrl && (
-                        <img src={`http://localhost:3000${company.bannerUrl}`} alt="banner" className="w-full h-full object-cover" />
+                        <img src={company.bannerUrl.startsWith('http') ? company.bannerUrl : `http://localhost:3000${company.bannerUrl}`} alt="banner" className="w-full h-full object-cover" />
                     )}
                     {/* Overlay gradient for readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -90,7 +90,7 @@ export const CompanyProfile = () => {
                     <div className="flex items-end justify-between -mt-10 relative z-10">
                         <div className="w-20 h-20 rounded-2xl border-4 border-white shadow-xl bg-white overflow-hidden flex items-center justify-center flex-shrink-0">
                             {company.logoUrl
-                                ? <img src={`http://localhost:3000${company.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
+                                ? <img src={company.logoUrl.startsWith('http') ? company.logoUrl : `http://localhost:3000${company.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
                                 : <span className="text-3xl font-bold text-gray-300">{company.name[0]}</span>}
                         </div>
                         {/* Open jobs badge */}
@@ -156,7 +156,7 @@ export const CompanyProfile = () => {
                                     {/* Small company logo repeated for each job */}
                                     <div className="w-10 h-10 rounded-xl border bg-gray-50 overflow-hidden flex items-center justify-center flex-shrink-0 mt-0.5">
                                         {company.logoUrl
-                                            ? <img src={`http://localhost:3000${company.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
+                                            ? <img src={company.logoUrl.startsWith('http') ? company.logoUrl : `http://localhost:3000${company.logoUrl}`} alt="logo" className="w-full h-full object-cover" />
                                             : <span className="text-base font-bold text-gray-300">{company.name[0]}</span>}
                                     </div>
                                     <div>

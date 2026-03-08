@@ -10,7 +10,7 @@ async function seedAdmin() {
         host: 'localhost',
         port: 3306,
         user: 'root',
-        password: '0123456789',
+        password: '123456789',
         database: 'job_portal',
     });
 

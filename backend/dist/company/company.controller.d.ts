@@ -1,9 +1,11 @@
 import { CompanyService } from './company.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 export declare class CompanyController {
     private readonly companyService;
-    constructor(companyService: CompanyService);
+    private readonly cloudinaryService;
+    constructor(companyService: CompanyService, cloudinaryService: CloudinaryService);
     create(req: any, createCompanyDto: CreateCompanyDto): Promise<import("../database/entities/company.entity").Company>;
     findOne(req: any): Promise<import("../database/entities/company.entity").Company | null>;
     getStats(req: any): Promise<{

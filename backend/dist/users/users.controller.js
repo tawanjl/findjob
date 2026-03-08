@@ -15,15 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
-const multer_1 = require("multer");
-const path_1 = require("path");
 const users_service_1 = require("./users.service");
+const cloudinary_service_1 = require("../cloudinary/cloudinary.service");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const update_profile_dto_1 = require("./dto/update-profile.dto");
 let UsersController = class UsersController {
     usersService;
-    constructor(usersService) {
+    cloudinaryService;
+    constructor(usersService, cloudinaryService) {
         this.usersService = usersService;
+        this.cloudinaryService = cloudinaryService;
     }
     getMyProfile(req) {
         return this.usersService.getMyProfile(req.user.userId);
@@ -34,7 +35,8 @@ let UsersController = class UsersController {
     async uploadAvatar(req, file) {
         if (!file)
             throw new common_1.BadRequestException('File is required');
-        return this.usersService.updateAvatar(req.user.userId, `/uploads/avatars/${file.filename}`);
+        const uploadResult = await this.cloudinaryService.uploadFile(file, 'jobportal/avatars');
+        return this.usersService.updateAvatar(req.user.userId, uploadResult.secure_url);
     }
 };
 exports.UsersController = UsersController;
@@ -56,13 +58,6 @@ __decorate([
 __decorate([
     (0, common_1.Post)('avatar'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
-        storage: (0, multer_1.diskStorage)({
-            destination: './uploads/avatars',
-            filename: (req, file, cb) => {
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-                cb(null, `avatar-${req.user['userId']}-${uniqueSuffix}${(0, path_1.extname)(file.originalname)}`);
-            },
-        }),
         fileFilter: (req, file, cb) => {
             if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/i)) {
                 return cb(new common_1.BadRequestException('Only JPG, PNG, WEBP files are allowed!'), false);
@@ -80,6 +75,7 @@ __decorate([
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        cloudinary_service_1.CloudinaryService])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map

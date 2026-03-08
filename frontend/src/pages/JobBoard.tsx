@@ -153,7 +153,7 @@ export const JobBoard = () => {
                                     <div className="flex-shrink-0 w-16 h-16 rounded overflow-hidden border bg-gray-50 flex items-center justify-center mt-1">
                                         {job.company.logoUrl ? (
                                             <img
-                                                src={`http://localhost:3000${job.company.logoUrl}`}
+                                                src={job.company.logoUrl.startsWith('http') ? job.company.logoUrl : `http://localhost:3000${job.company.logoUrl}`}
                                                 alt={job.company.name}
                                                 className="w-full h-full object-cover"
                                             />

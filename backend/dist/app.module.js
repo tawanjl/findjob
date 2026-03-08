@@ -56,6 +56,7 @@ const bookmark_module_1 = require("./bookmark/bookmark.module");
 const community_module_1 = require("./community/community.module");
 const work_experience_module_1 = require("./work-experience/work-experience.module");
 const education_module_1 = require("./education/education.module");
+const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 const Joi = __importStar(require("joi"));
 let AppModule = class AppModule {
 };
@@ -87,6 +88,7 @@ exports.AppModule = AppModule = __decorate([
             community_module_1.CommunityModule,
             work_experience_module_1.WorkExperienceModule,
             education_module_1.EducationModule,
+            cloudinary_module_1.CloudinaryModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
